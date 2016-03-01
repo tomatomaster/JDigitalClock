@@ -2,6 +2,7 @@ package ryutaro.ono.digitalclock;
 
 import java.awt.Color;
 import java.awt.Container;
+import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -28,7 +29,7 @@ public class JDigitalClockFrame extends JFrame {
   }
 
   private void initializeFrame() {
-    setBounds(FConsts.x, FConsts.y, FConsts.WIDTH, FConsts.HEIGHT);
+    setBounds(FConsts.X, FConsts.Y, FConsts.WIDTH, FConsts.HEIGHT);
     setTitle(FConsts.TITLE);
     setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
   }
@@ -39,7 +40,7 @@ public class JDigitalClockFrame extends JFrame {
   }
   
   /**
-   * 
+   * AnimationPanel is responsible to draw animation components.
    * @author ono
    *
    */
@@ -48,6 +49,7 @@ public class JDigitalClockFrame extends JFrame {
     Timer timer;
     int tCounter;
     Clock clock;
+    Font font = new Font(FConsts.FONT, FConsts.FONT_TYPE, FConsts.FONTSIZE);
     
     public AnimationPanel() {
       clock = new Clock();
@@ -59,12 +61,18 @@ public class JDigitalClockFrame extends JFrame {
     
     @Override
     protected void paintComponent(Graphics g) {
+      setBackground(FConsts.BGCOLOR);
       paintClock(g);
     }
     
+    /**
+     * show the now time!
+     * @param g
+     */
     private void paintClock(Graphics g) {
-      g.setColor(Color.red);
-      g.drawString(clock.getTimeString(), 10, 10);
+      g.setFont(font);
+      g.setColor(FConsts.FONTCOLOR);
+      g.drawString(clock.getTimeString(), FConsts.WIDTH/2 - FConsts.FONTSIZE*2, FConsts.HEIGHT/2);
     }
 
     /**
