@@ -3,6 +3,11 @@ package ryutaro.ono.digitalclock;
 import java.awt.Color;
 import java.awt.Font;
 
+/**
+ * FConsts manage the default parameter, like static final parameters.
+ * @author ono
+ *
+ */
 public class FConsts {
   //FrameSize
   static final int WIDTH = 400;

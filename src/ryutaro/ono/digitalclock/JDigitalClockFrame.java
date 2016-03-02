@@ -61,6 +61,7 @@ public class JDigitalClockFrame extends JFrame {
     
     @Override
     protected void paintComponent(Graphics g) {
+      //g.clearRect(0, 0, FConsts.WIDTH, FConsts.HEIGHT); TODO Windowsdで起動した場合なぜか前のpaintが残る。調べる
       setBackground(FConsts.BGCOLOR);
       paintClock(g);
     }
