@@ -21,12 +21,12 @@ public class FConsts {
   /**
    * AnimationPanel
    */
-  static final int FRATE = 10; //ms
-  public static final Color BGCOLOR = Color.BLACK;
-  public static final Color FONTCOLOR = Color.GREEN;
+  static final int FRATE = 100; //ms
+  public static final Color BGCOLOR = Color.WHITE;
+  public static final Color FONTCOLOR = Color.BLACK;
   //Font
   public static final String FONT = "Arial";
   public static final int FONT_TYPE = Font.BOLD;
-  public static final int FONTSIZE = 60;
+  public static final int FONTSIZE = 30;
 
 }
