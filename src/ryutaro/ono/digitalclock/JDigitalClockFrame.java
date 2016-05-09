@@ -3,14 +3,24 @@ package ryutaro.ono.digitalclock;
 import java.awt.Container;
 import java.awt.Font;
 import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.Point;
+import java.awt.PopupMenu;
 import java.awt.Rectangle;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseMotionAdapter;
+import java.awt.event.MouseMotionListener;
 
 import javax.swing.JFrame;
 import javax.swing.JMenuBar;
 import javax.swing.JPanel;
+import javax.swing.JPopupMenu;
+import javax.swing.JWindow;
 import javax.swing.Timer;
+import javax.swing.event.MouseInputAdapter;
+import javax.swing.event.MouseInputListener;
 
 import ryutaro.ono.digitalclock.service.clock.Clock;
 
@@ -20,10 +30,11 @@ import ryutaro.ono.digitalclock.service.clock.Clock;
  * @author ono
  *
  */
-public class JDigitalClockFrame extends JFrame {
+public class JDigitalClockFrame extends JWindow {
 
   AnimationPanel animationP = new AnimationPanel();
   WindowPropertyManager wpm = WindowPropertyManager.getInstance(); // Menueで変更される値を管理するインスタンス
+  JPopupMenu popupMenu = new JPopupMenu();
 
   public JDigitalClockFrame() {
     initializeFrame();
@@ -31,11 +42,24 @@ public class JDigitalClockFrame extends JFrame {
     setVisible(true);
   }
 
+
   private void initializeFrame() {
     setBounds(FConsts.X, FConsts.Y, FConsts.WIDTH, FConsts.HEIGHT);
-    setTitle(FConsts.TITLE);
-    setJMenuBar(new MyMenuBar());
-    setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+    addMouseListener(new MyMouseListener());
+    initPopupMenu();
+    // setMenuBarContents(); only use JFrame
+  }
+
+  /**
+   * only use JFrame
+   */
+  /*
+   * private void setMenuBarContents() { setTitle(FConsts.TITLE); setJMenuBar(new MyMenuBar());
+   * setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); }
+   */
+
+  private void initPopupMenu() {
+    popupMenu.add(new MyMenu());
   }
 
   private void addComponents() {
@@ -66,9 +90,10 @@ public class JDigitalClockFrame extends JFrame {
 
     @Override
     protected void paintComponent(Graphics g) {
-      // g.clearRect(0, 0, FConsts.WIDTH, FConsts.HEIGHT); TODO Windowsdで起動した場合なぜか前のpaintが残る。調べる
-      setBackground(wpm.getBgColor());
-      paintClock(g);
+      Graphics2D g2 = (Graphics2D) g;
+      g2.setBackground(wpm.getBgColor());
+      g2.clearRect(0, 0, getWidth(), getHeight());
+      paintClock(g2);
     }
 
     /**
@@ -78,7 +103,8 @@ public class JDigitalClockFrame extends JFrame {
      */
     private void paintClock(Graphics g) {
       font = wpm.getFont().deriveFont(wpm.getFontSize());
-      JDigitalClockFrame.this.setSize((int) wpm.getFontSize() * 6, (int) wpm.getFontSize() * 3 + 50);
+      JDigitalClockFrame.this
+          .setSize((int) wpm.getFontSize() * 6, (int) wpm.getFontSize() * 3 + 50);
       g.setFont(font);
       g.setColor(wpm.getFontColor());
       g.drawString(clock.getTimeString(),
@@ -101,4 +127,43 @@ public class JDigitalClockFrame extends JFrame {
       add(new MyMenu());
     }
   }
+
+  /**
+   * マウスのEvent処理
+   */
+  class MyMouseListener extends MouseInputAdapter {
+
+    Point startDrag, startPos;
+
+    @Override
+    public void mouseClicked(MouseEvent e) {
+      super.mouseClicked(e);
+      if ((e.getModifiers() & MouseEvent.BUTTON3_MASK) != 0) {
+        popupMenu.show(JDigitalClockFrame.this, 100, 100);
+      }
+    }
+
+    /**
+     * 以下Windowの移動に使用
+     */
+    public void mousePressed(MouseEvent e) {
+      startDrag = getScreenLocation(e);
+      startPos = JDigitalClockFrame.this.getLocation();
+    };
+
+    @Override
+    public void mouseReleased(MouseEvent e) {
+      Point cursor = getScreenLocation(e);
+      int xdiff = cursor.x - startDrag.x;
+      int ydiff = cursor.y - startDrag.y;
+      JDigitalClockFrame.this.setLocation(startPos.x + xdiff, startPos.y + ydiff);
+    }
+
+    Point getScreenLocation(MouseEvent e) {
+      Point p1 = e.getPoint();
+      Point p2 = JDigitalClockFrame.this.getLocationOnScreen();
+      return new Point(p1.x + p2.x, p1.y + p2.y);
+    }
+  }
+
 }
