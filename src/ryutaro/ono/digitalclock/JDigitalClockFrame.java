@@ -7,8 +7,10 @@ import java.awt.Graphics2D;
 import java.awt.Point;
 import java.awt.PopupMenu;
 import java.awt.Rectangle;
+import java.awt.dnd.MouseDragGestureRecognizer;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionAdapter;
 import java.awt.event.MouseMotionListener;
@@ -45,7 +47,9 @@ public class JDigitalClockFrame extends JWindow {
 
   private void initializeFrame() {
     setBounds(FConsts.X, FConsts.Y, FConsts.WIDTH, FConsts.HEIGHT);
-    addMouseListener(new MyMouseListener());
+    MyMouseListener mListener = new MyMouseListener();
+    addMouseListener(mListener);
+    addMouseMotionListener(mListener);
     initPopupMenu();
     // setMenuBarContents(); only use JFrame
   }
@@ -131,9 +135,10 @@ public class JDigitalClockFrame extends JWindow {
   /**
    * マウスのEvent処理
    */
-  class MyMouseListener extends MouseInputAdapter {
+  class MyMouseListener extends MouseAdapter {
 
     Point startDrag, startPos;
+    boolean isPressed = false;
 
     @Override
     public void mouseClicked(MouseEvent e) {
@@ -152,7 +157,7 @@ public class JDigitalClockFrame extends JWindow {
     };
 
     @Override
-    public void mouseReleased(MouseEvent e) {
+    public void mouseDragged(MouseEvent e) {
       Point cursor = getScreenLocation(e);
       int xdiff = cursor.x - startDrag.x;
       int ydiff = cursor.y - startDrag.y;
