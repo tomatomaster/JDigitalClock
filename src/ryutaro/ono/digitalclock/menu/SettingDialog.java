@@ -11,6 +11,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JComponent;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
@@ -18,6 +19,7 @@ import javax.swing.JFrame;
 import ryutaro.ono.digitalclock.FConsts;
 import ryutaro.ono.digitalclock.WindowPropertyManager;
 import ryutaro.ono.digitalclock.menu.choice.BackGroundColorChoice;
+import ryutaro.ono.digitalclock.menu.choice.ColorSelectComboBox;
 import ryutaro.ono.digitalclock.menu.choice.FontChoice;
 import ryutaro.ono.digitalclock.menu.choice.FontColorChoice;
 import ryutaro.ono.digitalclock.menu.choice.FontSizeChoice;
@@ -70,9 +72,10 @@ public class SettingDialog extends JDialog {
     setComponent(fontSizeChoice, 1, 1, gbc);
     Choice fontColorChoice = new FontColorChoice();
     setComponent(fontColorChoice, 1, 2, gbc);
-    Choice backGroundColorChoice = new BackGroundColorChoice();
-    setComponent(backGroundColorChoice, 1, 3, gbc);
-
+    //Choice backGroundColorChoice = new BackGroundColorChoice();
+    //setComponent(backGroundColorChoice, 1, 3, gbc);
+    ColorSelectComboBox comboBox = new ColorSelectComboBox();
+    setComponent(comboBox, 1, 3, gbc);
     // ColorTipの配置
     /*
      * WindowPropertyManager wpm = WindowPropertyManager.getInstance(); gbc.gridx = 2; gbc.gridy =

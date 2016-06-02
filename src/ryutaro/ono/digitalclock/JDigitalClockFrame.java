@@ -41,9 +41,9 @@ public class JDigitalClockFrame extends JWindow {
   public JDigitalClockFrame() {
     initializeFrame();
     addComponents();
+    wpm.setGuiInfo();
     setVisible(true);
   }
-
 
   private void initializeFrame() {
     setBounds(FConsts.X, FConsts.Y, FConsts.WIDTH, FConsts.HEIGHT);
